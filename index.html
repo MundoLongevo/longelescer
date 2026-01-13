@@ -1,0 +1,2706 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mundo Longevo - Gerenciador de Longevidade Positiva</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Nunito:wght@400;500;600;700;800&display=swap">
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --secondary: #00B4D8;
+            --accent: #FFD60A;
+            --success: #38B000;
+            --light: #FFF9E6;
+            --dark: #1A1A2E;
+            --warning: #FF9E00;
+            --danger: #E63946;
+            --purple: #7209B7;
+            --pink: #FF006E;
+            --shadow: rgba(0, 0, 0, 0.15);
+            --radius: 12px;
+            --text-large: 1.2rem;
+            --text-xlarge: 1.4rem;
+            --text-xxlarge: 1.8rem;
+            --text-title: 3rem;
+            --scrollbar-width: 12px;
+            --scrollbar-track: #F0F0F0;
+            --scrollbar-thumb: #FF6B35;
+            --scrollbar-thumb-hover: #FF4500;
+        }
+        
+        /* ESTILOS DA BARRA DE ROLAGEM */
+        ::-webkit-scrollbar {
+            width: var(--scrollbar-width);
+            height: var(--scrollbar-width);
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--pink) 100%);
+            border-radius: 10px;
+            border: 3px solid var(--scrollbar-track);
+            transition: all 0.3s ease;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--scrollbar-thumb-hover) 0%, #FF006E 100%);
+            transform: scale(1.05);
+        }
+        
+        ::-webkit-scrollbar-corner {
+            background: var(--scrollbar-track);
+        }
+        
+        /* Estilo para Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--scrollbar-track);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #FFE8CC 0%, #E0F7FF 100%);
+            color: var(--dark);
+            line-height: 1.7;
+            min-height: 100vh;
+            padding: 10px;
+            font-size: var(--text-large);
+            overflow-x: hidden;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        
+        /* Container principal com rolagem suave */
+        .main-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--pink) 100%);
+            color: white;
+            padding: 40px 30px 30px;
+            border-radius: var(--radius);
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px var(--shadow);
+            text-align: center;
+            border: 5px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-top {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .app-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: white;
+            letter-spacing: 2px;
+            line-height: 1;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .app-subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 25px;
+            letter-spacing: 0.5px;
+        }
+        
+        .direct-access {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent) 0%, #FFC300 100%);
+            color: var(--dark);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 800;
+            text-decoration: none;
+            border: 3px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+            font-size: 1.2rem;
+        }
+        
+        .direct-access:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        
+        .separator {
+            width: 80%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.5);
+            margin: 25px auto;
+            border-radius: 2px;
+        }
+        
+        .today-badge {
+            background: var(--accent);
+            color: var(--dark);
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.3rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 3px solid white;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 auto 25px;
+            width: fit-content;
+        }
+        
+        .today-badge i {
+            font-size: 1.5rem;
+        }
+        
+        .habits-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+        }
+        
+        .habits-subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+        
+        .author {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            opacity: 0.95;
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 12px 25px;
+            border-radius: 30px;
+            display: inline-block;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .intro-text {
+            font-size: 1.4rem;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius);
+            border-left: 5px solid var(--accent);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .intro-text strong {
+            color: var(--accent);
+            font-weight: 800;
+        }
+        
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .metric-card {
+            background: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: 0 5px 15px var(--shadow);
+            border-top: 5px solid var(--primary);
+            transition: transform 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .metric-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+        
+        .metric-label {
+            font-size: 1.1rem;
+            color: var(--dark);
+            font-weight: 700;
+        }
+        
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: var(--text-title);
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-weight: 800;
+            color: white;
+            letter-spacing: 1px;
+        }
+        
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: var(--text-xxlarge);
+            color: var(--secondary);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 5px solid var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: var(--text-xlarge);
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .intro-section {
+            background: linear-gradient(135deg, white 0%, var(--light) 100%);
+            padding: 40px;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px var(--shadow);
+            border: 3px solid var(--secondary);
+        }
+        
+        .intro-box {
+            background: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            margin-bottom: 25px;
+            border-left: 8px solid var(--primary);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+        
+        .intro-box h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .intro-box h3 i {
+            color: var(--accent);
+            font-size: 1.8rem;
+        }
+        
+        .system-fq5c {
+            background: linear-gradient(135deg, #E6F7FF 0%, #F0F9FF 100%);
+            padding: 30px;
+            border-radius: var(--radius);
+            margin: 30px 0;
+            border: 3px solid var(--secondary);
+        }
+        
+        .system-title {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-weight: 800;
+        }
+        
+        .verbs-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .verb-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: 0 5px 15px var(--shadow);
+            border-top: 5px solid var(--accent);
+            transition: transform 0.3s ease;
+        }
+        
+        .verb-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .verb-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .verb-title {
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .how-to-use {
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFF0CC 100%);
+            padding: 30px;
+            border-radius: var(--radius);
+            margin-top: 30px;
+            border: 3px solid var(--accent);
+        }
+        
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+        
+        .step-card {
+            background: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            position: relative;
+            border-left: 8px solid var(--success);
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            background: var(--success);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.3rem;
+            border: 3px solid white;
+        }
+        
+        .reminders-section {
+            background: linear-gradient(135deg, #FFE6E6 0%, #FFCCCC 100%);
+            padding: 30px;
+            border-radius: var(--radius);
+            margin: 30px 0;
+            border: 3px solid var(--danger);
+        }
+        
+        .reminder-form {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .reminder-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 18px;
+            border: 3px solid var(--secondary);
+            border-radius: var(--radius);
+            font-size: 1.1rem;
+            font-family: 'Nunito', sans-serif;
+            background-color: white;
+        }
+        
+        .reminder-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+        }
+        
+        .reminder-time {
+            padding: 18px;
+            border: 3px solid var(--secondary);
+            border-radius: var(--radius);
+            font-size: 1.1rem;
+            background-color: white;
+        }
+        
+        .reminders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .reminders-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .reminders-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--secondary) 0%, #0077B6 100%);
+        }
+        
+        .reminder-item {
+            background: white;
+            padding: 20px;
+            border-radius: var(--radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 8px solid var(--warning);
+            box-shadow: 0 3px 10px var(--shadow);
+            min-height: 80px;
+        }
+        
+        .reminder-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+            flex: 1;
+        }
+        
+        .reminder-time-badge {
+            background: var(--secondary);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        
+        .reminder-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .reminder-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .reminder-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .reminder-btn.delete {
+            background: var(--danger);
+        }
+        
+        .reminder-btn.done {
+            background: var(--success);
+        }
+        
+        .empty-reminders {
+            text-align: center;
+            padding: 30px;
+            color: var(--dark);
+            font-style: italic;
+            font-size: 1.2rem;
+        }
+        
+        .quote-container {
+            background: linear-gradient(135deg, var(--accent) 0%, #FFC300 100%);
+            color: var(--dark);
+            padding: 30px;
+            border-radius: var(--radius);
+            margin: 30px 0;
+            text-align: center;
+            font-style: italic;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 25px var(--shadow);
+            border: 5px solid white;
+            font-weight: 600;
+        }
+        
+        .quote-container i {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            color: var(--primary);
+        }
+        
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px var(--shadow);
+            border: 3px solid var(--primary);
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+        }
+        
+        .tab {
+            padding: 22px 30px;
+            cursor: pointer;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            flex: 1;
+            text-align: center;
+            transition: all 0.3s ease;
+            border-bottom: 5px solid transparent;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            background-color: white;
+            color: var(--dark);
+            min-width: 150px;
+        }
+        
+        .tab:hover {
+            background-color: var(--light);
+            color: var(--primary);
+        }
+        
+        .tab.active {
+            background: linear-gradient(to bottom, white, var(--light));
+            color: var(--primary);
+            border-bottom: 5px solid var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 35px;
+            border-radius: var(--radius);
+            box-shadow: 0 8px 25px var(--shadow);
+            margin-bottom: 30px;
+            border: 3px solid var(--secondary);
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab-content::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        .tab-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--purple) 0%, #560BAD 100%);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .habits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+            padding-bottom: 10px;
+        }
+        
+        .habits-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .habits-grid::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--success) 0%, #2D9C00 100%);
+        }
+        
+        .habit-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: 0 8px 20px var(--shadow);
+            border-left: 8px solid var(--primary);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            border-top: 5px solid var(--accent);
+            min-height: 350px;
+        }
+        
+        .habit-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .habit-card.daily {
+            border-left-color: var(--primary);
+        }
+        
+        .habit-card.weekly {
+            border-left-color: var(--purple);
+        }
+        
+        .habit-number {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.4rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 3px solid white;
+        }
+        
+        .habit-meta {
+            background: linear-gradient(135deg, var(--light) 0%, #FFEECC 100%);
+            padding: 18px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: 700;
+            color: var(--dark);
+            border: 2px solid var(--accent);
+            font-size: 1.1rem;
+        }
+        
+        .habit-meta i {
+            margin-right: 12px;
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+        
+        .notes-area {
+            width: 100%;
+            min-height: 100px;
+            padding: 18px;
+            border: 3px solid var(--secondary);
+            border-radius: 10px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            resize: vertical;
+            transition: all 0.3s;
+            font-weight: 500;
+            background-color: var(--light);
+        }
+        
+        .notes-area:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+        }
+        
+        .habit-status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .check-btn {
+            background: linear-gradient(135deg, var(--success) 0%, #2D9C00 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(56, 176, 0, 0.3);
+            border: 3px solid white;
+        }
+        
+        .check-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 20px rgba(56, 176, 0, 0.4);
+        }
+        
+        .check-btn.checked {
+            background: linear-gradient(135deg, var(--secondary) 0%, #0077B6 100%);
+            box-shadow: 0 5px 15px rgba(0, 180, 216, 0.3);
+        }
+        
+        .calendar-container {
+            background: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: 0 8px 25px var(--shadow);
+            margin-bottom: 30px;
+            border: 3px solid var(--secondary);
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, var(--light) 0%, #E6F7FF 100%);
+            padding: 20px;
+            border-radius: var(--radius);
+            border: 3px solid var(--accent);
+        }
+        
+        .calendar-nav {
+            background: var(--primary);
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            border: 3px solid white;
+        }
+        
+        .calendar-nav:hover {
+            background: var(--pink);
+            transform: scale(1.1);
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .calendar-day {
+            padding: 20px 10px;
+            text-align: center;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--secondary) 0%, #0077B6 100%);
+            font-weight: 800;
+            color: white;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            border: 3px solid white;
+        }
+        
+        .calendar-date {
+            padding: 20px 10px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            font-weight: 700;
+            font-size: 1.2rem;
+            background-color: var(--light);
+            border: 3px solid white;
+        }
+        
+        .calendar-date:hover {
+            background-color: #FFEECC;
+            transform: scale(1.05);
+        }
+        
+        .calendar-date.active {
+            background: linear-gradient(135deg, var(--primary) 0%, #FF8C5A 100%);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+        
+        .calendar-date.has-habits::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 12px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        
+        .summary-container {
+            background: white;
+            padding: 35px;
+            border-radius: var(--radius);
+            box-shadow: 0 8px 25px var(--shadow);
+            border: 3px solid var(--purple);
+        }
+        
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--light) 0%, #F0F9FF 100%);
+            padding: 25px;
+            border-radius: var(--radius);
+            text-align: center;
+            border-left: 8px solid var(--accent);
+            border-top: 5px solid var(--primary);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+        
+        .stat-label {
+            font-size: 1.2rem;
+            color: var(--dark);
+            font-weight: 700;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 20px 40px;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            letter-spacing: 0.5px;
+            border: 3px solid white;
+            box-shadow: 0 8px 20px var(--shadow);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, #FF4500 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(255, 107, 53, 0.5);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--purple) 0%, #560BAD 100%);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(114, 9, 183, 0.5);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #2D9C00 100%);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(56, 176, 0, 0.5);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: white;
+            margin-top: 50px;
+            background: linear-gradient(135deg, var(--dark) 0%, #16213E 100%);
+            border-radius: var(--radius);
+            box-shadow: 0 10px 25px var(--shadow);
+            border-top: 8px solid var(--accent);
+        }
+        
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--accent);
+            display: inline-block;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+        }
+        
+        .high-contrast {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .text-large {
+            font-size: 1.3rem;
+        }
+        
+        .text-bold {
+            font-weight: 700;
+        }
+        
+        .color-primary {
+            color: var(--primary);
+        }
+        
+        .color-accent {
+            color: var(--accent);
+        }
+        
+        .accessibility-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--pink) 100%);
+            color: white;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            z-index: 1000;
+            border: 4px solid white;
+            transition: all 0.3s ease;
+        }
+        
+        .accessibility-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+        
+        /* Botão de voltar ao topo */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 110px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--secondary) 0%, #0077B6 100%);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 999;
+            border: 3px solid white;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+        }
+        
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .scroll-to-top:hover {
+            background: linear-gradient(135deg, #0077B6 0%, #005A8C 100%);
+            transform: scale(1.1);
+        }
+        
+        /* Indicador de progresso da rolagem */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--pink) 100%);
+            z-index: 1000;
+            transition: width 0.3s ease;
+        }
+        
+        @media (max-width: 1100px) {
+            .habits-grid {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                max-height: none;
+                overflow-y: visible;
+            }
+            
+            .verbs-container {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            }
+            
+            .metrics-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .tab-content {
+                max-height: none;
+                overflow-y: visible;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .habits-grid {
+                grid-template-columns: 1fr;
+                max-height: none;
+                overflow-y: visible;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            .tab {
+                padding: 18px 15px;
+                font-size: 1rem;
+                min-width: 50%;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                padding: 18px 25px;
+            }
+            
+            .calendar-grid {
+                gap: 8px;
+            }
+            
+            .calendar-date, .calendar-day {
+                padding: 15px 5px;
+                font-size: 1rem;
+            }
+            
+            .calendar-nav {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .stat-number {
+                font-size: 2.8rem;
+            }
+            
+            .text-large {
+                font-size: 1.2rem;
+            }
+            
+            .app-title {
+                font-size: 2.8rem;
+            }
+            
+            .app-subtitle {
+                font-size: 1.6rem;
+            }
+            
+            .habits-title {
+                font-size: 2.2rem;
+            }
+            
+            .habits-subtitle {
+                font-size: 1.6rem;
+            }
+            
+            .direct-access {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+            
+            .verbs-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .today-badge {
+                font-size: 1.1rem;
+                padding: 12px 20px;
+            }
+            
+            .metrics-bar {
+                grid-template-columns: 1fr;
+            }
+            
+            .reminder-form {
+                flex-direction: column;
+            }
+            
+            .reminder-input, .reminder-time {
+                width: 100%;
+            }
+            
+            .tabs {
+                position: static;
+            }
+            
+            .accessibility-btn {
+                bottom: 20px;
+                right: 20px;
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .scroll-to-top {
+                bottom: 90px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .tab {
+                padding: 15px 10px;
+                font-size: 0.9rem;
+                min-width: 100%;
+            }
+            
+            .habit-card {
+                padding: 25px 20px;
+                min-height: 300px;
+            }
+            
+            .habit-number {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+            
+            .calendar-date, .calendar-day {
+                padding: 12px 3px;
+                font-size: 0.9rem;
+            }
+            
+            .verbs-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .metric-value {
+                font-size: 2.5rem;
+            }
+            
+            .app-title {
+                font-size: 2.2rem;
+            }
+            
+            .app-subtitle {
+                font-size: 1.4rem;
+            }
+            
+            .habits-title {
+                font-size: 1.8rem;
+            }
+            
+            .habits-subtitle {
+                font-size: 1.4rem;
+            }
+            
+            .direct-access {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        .pdf-content {
+            display: none;
+        }
+        
+        /* Animações suaves para rolagem */
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
+        
+        /* Estilo para elementos com overflow */
+        .scrollable-content {
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--scrollbar-track);
+        }
+    </style>
+</head>
+<body class="high-contrast smooth-scroll">
+    
+    <!-- Indicador de progresso da rolagem -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+    
+    <!-- Botão para voltar ao topo -->
+    <div class="scroll-to-top" id="scrollToTop" title="Voltar ao topo">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+    
+    <div class="main-wrapper">
+        <div class="container">
+            <header>
+                <div class="header-top">
+                    <div class="app-title">MUNDO LONGEVO</div>
+                    <div class="app-subtitle">Gerenciador de Longevidade Positiva</div>
+                </div>
+                
+                <a href="#gestionador" class="direct-access">
+                    <i class="fas fa-forward"></i> IR DIRETO PARA O GERENCIADOR
+                </a>
+                
+                <div class="separator"></div>
+                
+                <div class="today-badge">
+                    <i class="fas fa-calendar-day"></i>
+                    <span id="current-date">TERÇA-FEIRA, 13 DE JANEIRO DE 2026</span>
+                </div>
+                
+                <div class="habits-title">VARAL DE HÁBITOS</div>
+                <div class="habits-subtitle">ATÔMICOS</div>
+                
+                <p class="author">POR RICARDO DE FARIA BARROS (PSICÓLOGO)</p>
+                
+                <div class="intro-text">
+                    <p>Hoje é um novo dia para pendurar hábitos no varal da sua vida. Os registros que você fizer serão para <strong id="today-text">HOJE (13/01/2026)</strong>.</p>
+                </div>
+            </header>
+            
+            <div class="metrics-bar">
+                <div class="metric-card">
+                    <div class="metric-value" id="today-habits">0</div>
+                    <div class="metric-label">HÁBITOS DE HOJE</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="week-habits">0</div>
+                    <div class="metric-label">ESTA SEMANA</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="total-habits">0</div>
+                    <div class="metric-label">TOTAL COMPLETOS</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="streak-days">0</div>
+                    <div class="metric-label">DIAS CONSECUTIVOS</div>
+                </div>
+            </div>
+            
+            <div class="intro-section">
+                <h2>BEM-VINDO AO SEU VARAL DE POSSIBILIDADES</h2>
+                
+                <div class="intro-box">
+                    <h3><i class="fas fa-seedling"></i> O QUE É O SISTEMA FQ5C?</h3>
+                    <p class="text-large">O Sistema <strong>FQ5C</strong> é uma abordagem desenvolvida pelo psicólogo Ricardo de Faria Barros para promover uma longevidade positiva e significativa. Representado por sete verbos fundamentais, cada um corresponde a uma dimensão essencial do bem-estar integral.</p>
+                    
+                    <div class="system-fq5c">
+                        <div class="system-title">OS 7 VERBOS DO SISTEMA FQ5C</div>
+                        <div class="verbs-container">
+                            <div class="verb-card">
+                                <i class="fas fa-hands-helping"></i>
+                                <div class="verb-title">FAZER</div>
+                                <p>Ação e produtividade com propósito</p>
+                            </div>
+                            <div class="verb-card">
+                                <i class="fas fa-heart"></i>
+                                <div class="verb-title">QUERER</div>
+                                <p>Desejo e motivação autênticos</p>
+                            </div>
+                            <div class="verb-card">
+                                <i class="fas fa-comments"></i>
+                                <div class="verb-title">CONVERSAR</div>
+                                <p>Diálogo e comunicação significativa</p>
+                            </div>
+                            <div class="verb-card">
+                                <i class="fas fa-share-alt"></i>
+                                <div class="verb-title">COMPARTILHAR</div>
+                                <p>Generosidade e conexão social</p>
+                            </div>
+                            <div class="verb-card">
+                                <i class="fas fa-smile"></i>
+                                <div class="verb-title">CURTIR</div>
+                                <p>Prazer e apreciação do momento</p>
+                            </div>
+                            <div class="verb-card">
+                                <i class="fas fa-brain"></i>
+                                <div class="verb-title">CONHECER</div>
+                                <p>Aprendizado e curiosidade contínuos</p>
+                            </div>
+                            <div class="verb-card">
+                                <i class="fas fa-hands"></i>
+                                <div class="verb-title">CUIDAR</div>
+                                <p>Autocuidado e cuidado com o outro</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reminders-section" id="gestionador">
+                    <h3><i class="fas fa-bell"></i> SEUS LEMBRETES PESSOAIS</h3>
+                    <p class="text-large">Adicione lembretes para não esquecer dos seus hábitos e compromissos importantes.</p>
+                    
+                    <div class="reminder-form">
+                        <input type="text" class="reminder-input" id="reminder-text" placeholder="Digite seu lembrete (ex: Beber água às 10h, Meditar após o almoço)">
+                        <input type="time" class="reminder-time" id="reminder-time" value="09:00">
+                        <button class="btn btn-success" id="add-reminder">
+                            <i class="fas fa-plus-circle"></i> ADICIONAR LEMBRETE
+                        </button>
+                    </div>
+                    
+                    <div class="reminders-list" id="reminders-list">
+                        <!-- Lembretes serão adicionados aqui -->
+                    </div>
+                </div>
+                
+                <div class="intro-box">
+                    <h3><i class="fas fa-tshirt"></i> O CONCEITO DO "VARAL DE POSSIBILIDADES"</h3>
+                    <p class="text-large">A imagem do <strong>varal</strong> é uma metáfora poderosa para a longevidade positiva. Assim como num varal tradicional penduramos roupas para secar ao sol, no varal da vida penduramos <strong>verbos, atitudes e escolhas</strong>.</p>
+                </div>
+                
+                <div class="how-to-use">
+                    <h3><i class="fas fa-user-circle"></i> COMO USAR ESTE GERENCIADOR</h3>
+                    <p class="text-large">Este gerenciador foi criado para ajudá-lo a cultivar seus hábitos atômicos de forma prática e significativa.</p>
+                    
+                    <div class="steps-container">
+                        <div class="step-card">
+                            <div class="step-number">1</div>
+                            <h4>VEJA A DATA DE HOJE</h4>
+                            <p class="text-large">No topo da página está destacado o dia de <strong>hoje</strong>. Todos os hábitos que você marcar serão registrados para esta data.</p>
+                        </div>
+                        
+                        <div class="step-card">
+                            <div class="step-number">2</div>
+                            <h4>ADICIONE LEMBRETES</h4>
+                            <p class="text-large">Use a seção acima para criar lembretes personalizados com horários específicos para seus hábitos.</p>
+                        </div>
+                        
+                        <div class="step-card">
+                            <div class="step-number">3</div>
+                            <h4>ACOMPANHE SUAS MÉTRICAS</h4>
+                            <p class="text-large">A barra de métricas mostra seu progresso: hábitos de hoje, semana, total e sequência de dias.</p>
+                        </div>
+                        
+                        <div class="step-card">
+                            <div class="step-number">4</div>
+                            <h4>MARQUE SEUS HÁBITOS</h4>
+                            <p class="text-large">Na aba "HÁBITOS ATÔMICOS", marque os hábitos que completou hoje e adicione anotações se desejar.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="quote-container" style="margin-top: 25px;">
+                        <i class="fas fa-quote-left"></i>
+                        <p class="text-large text-bold">OS REGISTROS QUE VOCÊ FAZ HOJE SÃO SEMENTES PARA A LONGEVIDADE POSITIVA DE AMANHÃ.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quote-container">
+                <i class="fas fa-quote-left"></i>
+                <p class="text-large text-bold">LONGELESCER NÃO É SAIR DE CENA. É APRENDER A OCUPAR O PALCO DE OUTRO JEITO.</p>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="habitos">HÁBITOS ATÔMICOS</div>
+                <div class="tab" data-tab="calendario">CALENDÁRIO</div>
+                <div class="tab" data-tab="resumo">RESUMO SEMANAL</div>
+                <div class="tab" data-tab="trilhas">TRILHAS TEMÁTICAS</div>
+                <div class="tab" data-tab="lembretes">MEUS LEMBRETES</div>
+            </div>
+            
+            <div id="habitos" class="tab-content active">
+                <h2>31 HÁBITOS ATÔMICOS DO MUNDO LONGEVO</h2>
+                <p class="text-large">Os hábitos que você marcar abaixo serão registrados para <strong id="today-date-display">HOJE</strong>. Selecione, combine e pendure no varal da sua vida os hábitos que fazem sentido agora.</p>
+                
+                <div class="habits-grid" id="daily-habits">
+                    <!-- Hábitos diários serão inseridos aqui via JavaScript -->
+                </div>
+                
+                <h2 style="margin-top: 50px;">HÁBITOS SEMANAIS</h2>
+                <div class="habits-grid" id="weekly-habits">
+                    <!-- Hábitos semanais serão inseridos aqui via JavaScript -->
+                </div>
+            </div>
+            
+            <div id="calendario" class="tab-content">
+                <h2>CALENDÁRIO DE PRÁTICAS</h2>
+                <p class="text-large">Acompanhe seus hábitos ao longo do mês. Os dias com hábitos registrados são marcados com um ponto colorido.</p>
+                
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button class="calendar-nav" id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                        <h3 id="current-month" class="color-primary">JANEIRO 2026</h3>
+                        <button class="calendar-nav" id="next-month"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-grid" id="calendar-days">
+                        <!-- Dias da semana -->
+                    </div>
+                    <div class="calendar-grid" id="calendar-dates">
+                        <!-- Datas do mês -->
+                    </div>
+                </div>
+                
+                <div id="day-habits" class="habits-grid" style="margin-top: 40px;">
+                    <!-- Hábitos do dia selecionado -->
+                </div>
+            </div>
+            
+            <div id="resumo" class="tab-content">
+                <h2>RESUMO SEMANAL</h2>
+                <p class="text-large">Veja um panorama dos seus hábitos realizados nesta semana.</p>
+                
+                <div class="summary-container">
+                    <div class="summary-stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="completed-habits">0</div>
+                            <div class="stat-label">HÁBITOS COMPLETOS</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="completed-daily">0</div>
+                            <div class="stat-label">HÁBITOS DIÁRIOS</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="completed-weekly">0</div>
+                            <div class="stat-label">HÁBITOS SEMANAIS</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="completion-rate">0%</div>
+                            <div class="stat-label">TAXA DE CONCLUSÃO</div>
+                        </div>
+                    </div>
+                    
+                    <h3>HÁBITOS REALIZADOS ESTA SEMANA</h3>
+                    <div id="weekly-summary-list" style="margin-top: 25px;">
+                        <!-- Lista de hábitos realizados -->
+                    </div>
+                    
+                    <h3 style="margin-top: 40px;">SUAS ANOTAÇÕES</h3>
+                    <div id="weekly-notes-list" style="margin-top: 25px;">
+                        <!-- Anotações da semana -->
+                    </div>
+                    
+                    <div class="controls">
+                        <button class="btn btn-primary" id="export-pdf">
+                            <i class="fas fa-file-pdf"></i> EXPORTAR RESUMO EM PDF
+                        </button>
+                        <button class="btn btn-success" id="save-all">
+                            <i class="fas fa-save"></i> SALVAR TUDO AGORA
+                        </button>
+                        <button class="btn btn-secondary" id="reset-week">
+                            <i class="fas fa-redo"></i> REINICIAR SEMANA
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="trilhas" class="tab-content">
+                <h2>TRILHAS TEMÁTICAS DO MUNDO LONGEVO</h2>
+                <p class="text-large">Combine hábitos para focar em áreas específicas do seu desenvolvimento.</p>
+                
+                <div class="habits-grid">
+                    <div class="habit-card">
+                        <h3 class="color-accent">SAIR DA APATIA</h3>
+                        <p class="text-large"><strong>Hábitos: 1, 2, 4, 9, 11, 23, 25</strong></p>
+                        <p>Combinação de hábitos para recuperar energia e interesse pela vida.</p>
+                    </div>
+                    
+                    <div class="habit-card">
+                        <h3 class="color-accent">VENCER O ISOLAMENTO</h3>
+                        <p class="text-large"><strong>Hábitos: 13, 14, 22, 24, 27, 28</strong></p>
+                        <p>Fortalecer conexões e criar pertencimento.</p>
+                    </div>
+                    
+                    <div class="habit-card">
+                        <h3 class="color-accent">CUIDAR DA CABEÇA</h3>
+                        <p class="text-large"><strong>Hábitos: 5, 6, 16, 17, 18</strong></p>
+                        <p>Hábitos para saúde emocional e mental.</p>
+                    </div>
+                    
+                    <div class="habit-card">
+                        <h3 class="color-accent">CUIDAR DO CORPO COM CARINHO</h3>
+                        <p class="text-large"><strong>Hábitos: 1, 2, 3, 4, 19, 20</strong></p>
+                        <p>Atitudes para bem-estar físico e vitalidade.</p>
+                    </div>
+                    
+                    <div class="habit-card">
+                        <h3 class="color-accent">MANTER A MENTE VIVA</h3>
+                        <p class="text-large"><strong>Hábitos: 7, 8, 9, 21, 10</strong></p>
+                        <p>Exercitar a cognição e a curiosidade.</p>
+                    </div>
+                    
+                    <div class="habit-card">
+                        <h3 class="color-accent">CUIDAR DA VIDA AO REDOR</h3>
+                        <p class="text-large"><strong>Hábitos: 12, 15, 29</strong></p>
+                        <p>Cuidar do ambiente e da própria história.</p>
+                    </div>
+                    
+                    <div class="habit-card">
+                        <h3 class="color-accent">SENTIDO E ESPIRITUALIDADE</h3>
+                        <p class="text-large"><strong>Hábitos: 16, 17, 28, 30</strong></p>
+                        <p>Cultivar gratidão, perdão e propósito.</p>
+                    </div>
+                    
+                    <div class="habit-card">
+                        <h3 class="color-accent">REVISÃO DE VIDA</h3>
+                        <p class="text-large"><strong>Hábitos: 15, 29, 30</strong></p>
+                        <p>Refletir sobre o passado e organizar memórias.</p>
+                    </div>
+                </div>
+                
+                <div class="quote-container" style="margin-top: 40px;">
+                    <i class="fas fa-quote-left"></i>
+                    <p class="text-large text-bold">A VIDA NÃO EXIGE PERFEIÇÃO. EXIGE CONTINUIDADE.</p>
+                </div>
+            </div>
+            
+            <div id="lembretes" class="tab-content">
+                <h2><i class="fas fa-bell"></i> MEUS LEMBRETES PESSOAIS</h2>
+                <p class="text-large">Gerencie aqui todos os seus lembretes para não esquecer dos hábitos importantes.</p>
+                
+                <div class="reminder-form" style="margin-bottom: 30px;">
+                    <input type="text" class="reminder-input" id="reminder-text-tab" placeholder="Digite seu lembrete (ex: Beber água às 10h, Meditar após o almoço)">
+                    <input type="time" class="reminder-time" id="reminder-time-tab" value="09:00">
+                    <button class="btn btn-success" id="add-reminder-tab">
+                        <i class="fas fa-plus-circle"></i> ADICIONAR LEMBRETE
+                    </button>
+                </div>
+                
+                <div class="reminders-list" id="reminders-list-tab">
+                    <!-- Lembretes serão adicionados aqui -->
+                </div>
+                
+                <div class="quote-container" style="margin-top: 30px;">
+                    <i class="fas fa-quote-left"></i>
+                    <p class="text-large text-bold">UM PEQUENO LEMBRETE PODE SER A PONTE ENTRE A INTENÇÃO E A AÇÃO.</p>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button class="btn btn-success" id="save-all-bottom">
+                    <i class="fas fa-save"></i> SALVAR TUDO LOCALMENTE
+                </button>
+                <button class="btn btn-primary" id="load-data">
+                    <i class="fas fa-folder-open"></i> CARREGAR DADOS SALVOS
+                </button>
+            </div>
+            
+            <footer>
+                <div class="logo" style="color: var(--accent);">MUNDO LONGEVO</div>
+                <p style="font-size: 1.2rem; margin: 20px 0; font-weight: 600;">© 2026 Gerenciador de Longevidade Positiva</p>
+                <p style="font-size: 1.3rem; margin-bottom: 20px; font-weight: 700; color: var(--accent);">POR RICARDO DE FARIA BARROS, PSICÓLOGO</p>
+                <p style="font-size: 1.2rem; font-style: italic; max-width: 800px; margin: 0 auto; line-height: 1.8;">
+                    Esta cartilha é um varal de possibilidades. Que você pendure nele apenas o que fizer sentido agora.
+                </p>
+            </footer>
+        </div>
+    </div>
+    
+    <div class="accessibility-btn" id="accessibility-toggle" title="Aumentar contraste e tamanho de fonte">
+        <i class="fas fa-universal-access"></i>
+    </div>
+    
+    <div id="pdf-content" class="pdf-content">
+        <h1>RESUMO SEMANAL - MUNDO LONGEVO</h1>
+        <h2 id="pdf-week-range">SEMANA DE 10 A 16 DE JANEIRO, 2026</h2>
+        <div id="pdf-stats"></div>
+        <div id="pdf-habits-list"></div>
+        <div id="pdf-notes-list"></div>
+        <p style="margin-top: 40px; font-style: italic; font-weight: bold;">"LONGELESCER É RECONHECER ISSO COM TERNURA. É ATUALIZAR-SE POR DENTRO." - RICARDO DE FARIA BARROS</p>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <script>
+        function getTodayDate() {
+            return "TERÇA-FEIRA, 13 DE JANEIRO DE 2026";
+        }
+        
+        function getTodayDateShort() {
+            return "13/01/2026";
+        }
+        
+        function getTodayKey() {
+            return "2026-01-13";
+        }
+        
+        const habits = [
+            { id: 1, title: "COPOS DE ÁGUA", description: "Beber água ao longo do dia sustenta o corpo e a energia vital.", meta: "8 COPOS POR DIA", category: "daily" },
+            { id: 2, title: "SONO", description: "Dormir bem organiza emoções, memória e recuperação física.", meta: "8 HORAS POR NOITE", category: "daily" },
+            { id: 3, title: "SOL E AR LIVRE", description: "Luz natural regula o humor e rompe o isolamento.", meta: "20 MINUTOS POR DIA", category: "daily" },
+            { id: 4, title: "EXERCÍCIO", description: "Movimentar o corpo mantém autonomia e confiança.", meta: "30 MINUTOS POR DIA", category: "daily" },
+            { id: 5, title: "RESPIRAÇÃO E ATENÇÃO PLENA POSSÍVEL", description: "Uma pausa consciente para estar no corpo e no agora.", meta: "5 MINUTOS POR DIA", category: "daily" },
+            { id: 6, title: "DESCONEXÃO TECNOLÓGICA", description: "Reduzir telas devolve presença e descanso mental.", meta: "30 MINUTOS POR DIA", category: "daily" },
+            { id: 7, title: "LEITURA", description: "Ler amplia o mundo e mantém a mente viva.", meta: "20 PÁGINAS POR DIA", category: "daily" },
+            { id: 8, title: "EXERCITAR A MEMÓRIA", description: "Jogos, lembranças e narrativas mantêm a cognição ativa.", meta: "10 MINUTOS POR DIA", category: "daily" },
+            { id: 9, title: "ESCUTA MUSICAL", description: "A música acessa emoções profundas e memórias afetivas.", meta: "15 MINUTOS POR DIA", category: "daily" },
+            { id: 10, title: "APRECIAR BELEZA", description: "Perceber algo bonito no cotidiano.", meta: "1 MOMENTO POR DIA", category: "daily" },
+            { id: 11, title: "RIR UM POUCO", description: "Rir alivia tensões e devolve leveza.", meta: "1 MOMENTO POR DIA", category: "daily" },
+            { id: 12, title: "CUIDAR DA CASA E DA VIDA", description: "Cuidar do lar, plantas, pets ou pequenos afazeres.", meta: "1 CUIDADO POR DIA", category: "daily" },
+            { id: 13, title: "MENSAGENS AFETUOSAS", description: "Enviar carinho fortalece vínculos.", meta: "3 MENSAGENS POR DIA", category: "daily" },
+            { id: 14, title: "BOA CONVERSA", description: "Conversar com escuta e presença cria pertencimento.", meta: "1 CONVERSA POR DIA", category: "daily" },
+            { id: 15, title: "REGISTRO DE VIDA", description: "Registrar o dia ou a própria história ajuda a dar sentido à caminhada.", meta: "1 REGISTRO POR DIA", category: "daily" },
+            { id: 16, title: "PARADA ESPIRITUAL", description: "Silêncio, oração ou reflexão alimentam o sentido da vida.", meta: "10 MINUTOS POR DIA", category: "daily" },
+            { id: 17, title: "GRATIDÃO", description: "Reconhecer algo bom muda o olhar sobre o dia.", meta: "1 AGRADECIMENTO POR DIA", category: "daily" },
+            { id: 18, title: "DESPOLUIÇÃO MENTAL", description: "Interromper pensamentos negativos repetitivos é higiene emocional.", meta: "1 PRÁTICA POR DIA", category: "daily" },
+            { id: 19, title: "SÓ POR HOJE, NÃO", description: "Escolhas conscientes com álcool, açúcar, sal e gorduras.", meta: "1 COMPROMISSO POR DIA", category: "daily" },
+            { id: 20, title: "COLORIR O PRATO", description: "Quanto mais cores naturais, mais vida no corpo.", meta: "1 REFEIÇÃO COLORIDA POR DIA", category: "daily" },
+            { id: 21, title: "APRENDER ALGO NOVO", description: "Aprender mantém a curiosidade viva.", meta: "1 APRENDIZADO POR DIA", category: "daily" },
+            { id: 22, title: "RECONHECER ALGUÉM", description: "Valorizar o outro fortalece vínculos e dignidade.", meta: "1 RECONHECIMENTO POR DIA", category: "daily" },
+            { id: 23, title: "MISSÃO PORTA AFORA", description: "Sair de casa, mesmo que pouco, quebra a apatia.", meta: "1 SAÍDA POR DIA", category: "daily" },
+            { id: 24, title: "LIGAÇÃO QUE AQUECE", description: "Ouvir e ser ouvido aproxima corações.", meta: "1 LIGAÇÃO POR DIA", category: "daily" },
+            { id: 25, title: "PEQUENA AVENTURA", description: "Fazer algo diferente da rotina reativa a vida.", meta: "1 NOVIDADE POR DIA", category: "daily" },
+            { id: 26, title: "REGISTRO DE DESPESAS", description: "Anotar gastos devolve controle, segurança e consciência financeira.", meta: "1 REGISTRO POR DIA", category: "daily" },
+            { id: 27, title: "PARTICIPAR DE ALGO", description: "Grupos, encontros ou atividades presenciais ou online.", meta: "1 VEZ POR SEMANA", category: "weekly" },
+            { id: 28, title: "AJUDAR ALGUÉM DE VERDADE", description: "Oferecer ajuda concreta ou simbólica, com atenção e presença.", meta: "1 GESTO DELIBERADO POR SEMANA", category: "weekly" },
+            { id: 29, title: "ARRUMAÇÃO COM MEMÓRIA", description: "Organizar livros, fotos e objetos com calma e presença.", meta: "20 MINUTOS POR SEMANA", category: "weekly" },
+            { id: 30, title: "RITUAL DE LIBERAÇÃO E PERDÃO", description: "Culpa e mágoa se escrevem e se soltam. O perdão fica guardado no coração.", meta: "1 RITUAL POR SEMANA", category: "weekly" },
+            { id: 31, title: "CURTIR CONSCIENTEMENTE", description: "Permitir-se prazer simples e presente, sem culpa.", meta: "AO MENOS 1 ESCOLHA CONSCIENTE POR SEMANA", category: "weekly" }
+        ];
+
+        const quotes = [
+            "LONGELESCER NÃO É SAIR DE CENA. É APRENDER A OCUPAR O PALCO DE OUTRO JEITO.",
+            "A VIDA NÃO EXIGE PERFEIÇÃO. EXIGE CONTINUIDADE.",
+            "LONGELESCER É CONTINUAR PERTENCENDO AO MUNDO COM PASSOS MAIS ATENTOS, ESCOLHAS MAIS CONSCIENTES.",
+            "NÃO É ENCOLHER A EXISTÊNCIA. É HABITAR OS DIAS COM MAIS SENTIDO.",
+            "QUE VOCÊ PENDURE NO VARAL APENAS O QUE FIZER SENTIDO AGORA.",
+            "VOCÊ NÃO ESTA ATRASADO. ESTÁ APENAS VESTINDO, COM MAIS CONSCIÊNCIA, O TEMPO QUE LHE CABE AGORA.",
+            "ALGUMAS ROUPAS SÃO LEVES E SECAM RÁPIDO AO SOL. OUTRAS SÃO MAIS PESADAS, CARREGADAS DE HISTÓRIA.",
+            "BELCHIOR JÁ NOS LEMBROU QUE, NO PRESENTE, A MENTE E O CORPO SÃO DIFERENTES."
+        ];
+
+        let appState = {
+            habitsCompleted: {},
+            habitNotes: {},
+            reminders: [],
+            lastSave: null,
+            fontSize: "large",
+            highContrast: true
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const todayDate = getTodayDate();
+            const todayShort = getTodayDateShort();
+            
+            document.getElementById('current-date').textContent = todayDate;
+            document.getElementById('today-text').textContent = 'HOJE (' + todayShort + ')';
+            document.getElementById('today-date-display').textContent = 'HOJE (' + todayShort + ')';
+            
+            loadFromLocalStorage();
+            renderHabits();
+            setupTabs();
+            initCalendar();
+            setupEventListeners();
+            updateWeeklySummary();
+            updateMetrics();
+            renderReminders();
+            
+            showRandomQuote();
+            
+            document.getElementById('accessibility-toggle').addEventListener('click', toggleAccessibility);
+            
+            document.querySelector('.direct-access').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector('.tabs').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            if (appState.lastSave) {
+                showNotification('DADOS CARREGADOS DA SUA ÚLTIMA SESSÃO!', 'success');
+            }
+            
+            // Configurar funcionalidades de rolagem
+            setupScrollFeatures();
+        });
+
+        // FUNÇÕES DE ROLAGEM MELHORADAS
+        function setupScrollFeatures() {
+            // Botão voltar ao topo
+            const scrollToTopBtn = document.getElementById('scrollToTop');
+            
+            window.addEventListener('scroll', function() {
+                // Mostrar/ocultar botão de voltar ao topo
+                if (window.pageYOffset > 300) {
+                    scrollToTopBtn.classList.add('visible');
+                } else {
+                    scrollToTopBtn.classList.remove('visible');
+                }
+                
+                // Atualizar barra de progresso
+                updateScrollProgress();
+            });
+            
+            // Evento do botão voltar ao topo
+            scrollToTopBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Suavizar links internos
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href === '#') return;
+                    
+                    e.preventDefault();
+                    const targetElement = document.querySelector(href);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        function updateScrollProgress() {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (window.pageYOffset / windowHeight) * 100;
+            scrollProgress.style.width = scrolled + '%';
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('mundoLongevoData');
+            if (saved) {
+                try {
+                    appState = JSON.parse(saved);
+                    
+                    if (!appState.reminders) {
+                        appState.reminders = [];
+                    }
+                } catch (e) {
+                    console.error("Erro ao carregar dados salvos:", e);
+                }
+            }
+        }
+
+        function saveToLocalStorage() {
+            appState.lastSave = new Date().toISOString();
+            localStorage.setItem('mundoLongevoData', JSON.stringify(appState));
+            showNotification('DADOS SALVOS COM SUCESSO!', 'success');
+        }
+
+        function updateMetrics() {
+            const todayKey = getTodayKey();
+            
+            let todayCount = 0;
+            for (const habitId in appState.habitsCompleted) {
+                if (appState.habitsCompleted[habitId] && appState.habitsCompleted[habitId].startsWith(todayKey)) {
+                    todayCount++;
+                }
+            }
+            document.getElementById('today-habits').textContent = todayCount;
+            
+            const today = new Date();
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - today.getDay());
+            const endOfWeek = new Date(today);
+            endOfWeek.setDate(today.getDate() + (6 - today.getDay()));
+            
+            let weekCount = 0;
+            for (const habitId in appState.habitsCompleted) {
+                if (appState.habitsCompleted[habitId]) {
+                    const completionDate = new Date(appState.habitsCompleted[habitId]);
+                    if (completionDate >= startOfWeek && completionDate <= endOfWeek) {
+                        weekCount++;
+                    }
+                }
+            }
+            document.getElementById('week-habits').textContent = weekCount;
+            
+            const totalCount = Object.keys(appState.habitsCompleted).filter(id => appState.habitsCompleted[id]).length;
+            document.getElementById('total-habits').textContent = totalCount;
+            
+            let streak = 0;
+            const dates = Object.values(appState.habitsCompleted)
+                .filter(date => date)
+                .map(date => date.split('T')[0])
+                .sort()
+                .filter((date, index, array) => array.indexOf(date) === index);
+            
+            if (dates.length > 0) {
+                const todayStr = new Date().toISOString().split('T')[0];
+                let currentDate = new Date(dates[dates.length - 1]);
+                let lastDate = new Date(dates[dates.length - 1]);
+                
+                streak = 1;
+                for (let i = dates.length - 2; i >= 0; i--) {
+                    const prevDate = new Date(dates[i]);
+                    const diffTime = Math.abs(currentDate - prevDate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays === 1) {
+                        streak++;
+                        currentDate = prevDate;
+                    } else {
+                        break;
+                    }
+                }
+                
+                const diffFromToday = Math.abs(new Date(todayStr) - lastDate) / (1000 * 60 * 60 * 24);
+                if (diffFromToday > 1) {
+                    streak = 0;
+                }
+            }
+            
+            document.getElementById('streak-days').textContent = streak;
+        }
+
+        function renderHabits() {
+            const dailyContainer = document.getElementById('daily-habits');
+            const weeklyContainer = document.getElementById('weekly-habits');
+            
+            dailyContainer.innerHTML = '';
+            weeklyContainer.innerHTML = '';
+            
+            habits.forEach(habit => {
+                const habitElement = createHabitElement(habit);
+                
+                if (habit.category === 'daily') {
+                    dailyContainer.appendChild(habitElement);
+                } else {
+                    weeklyContainer.appendChild(habitElement);
+                }
+            });
+        }
+
+        function createHabitElement(habit) {
+            const habitId = `habit-${habit.id}`;
+            const isCompleted = appState.habitsCompleted[habitId] || false;
+            const note = appState.habitNotes[habitId] || '';
+            
+            const habitCard = document.createElement('div');
+            habitCard.className = `habit-card ${habit.category}`;
+            habitCard.innerHTML = `
+                <div class="habit-number">${habit.id}</div>
+                <h3>${habit.title}</h3>
+                <p class="text-large">${habit.description}</p>
+                <div class="habit-meta">
+                    <i class="fas fa-bullseye"></i> META: ${habit.meta}
+                </div>
+                <textarea class="notes-area" placeholder="ANOTAÇÕES SOBRE ESTE HÁBITO..." data-habit-id="${habitId}">${note}</textarea>
+                <div class="habit-status">
+                    <button class="check-btn ${isCompleted ? 'checked' : ''}" data-habit-id="${habitId}">
+                        <i class="fas fa-${isCompleted ? 'check-circle' : 'check'}"></i>
+                        ${isCompleted ? 'REALIZADO HOJE' : 'MARCAR COMO REALIZADO'}
+                    </button>
+                    <span class="text-large text-bold">${isCompleted ? formatDate(new Date(appState.habitsCompleted[habitId])) : ''}</span>
+                </div>
+            `;
+            
+            return habitCard;
+        }
+
+        function renderReminders() {
+            const remindersList = document.getElementById('reminders-list');
+            const remindersListTab = document.getElementById('reminders-list-tab');
+            
+            if (appState.reminders.length === 0) {
+                remindersList.innerHTML = '<div class="empty-reminders"><p class="text-large">Você ainda não tem lembretes. Adicione seu primeiro lembrete acima!</p></div>';
+                if (remindersListTab) {
+                    remindersListTab.innerHTML = '<div class="empty-reminders"><p class="text-large">Você ainda não tem lembretes. Adicione seu primeiro lembrete acima!</p></div>';
+                }
+                return;
+            }
+            
+            remindersList.innerHTML = '';
+            if (remindersListTab) {
+                remindersListTab.innerHTML = '';
+            }
+            
+            appState.reminders.forEach((reminder, index) => {
+                if (!reminder.completed) {
+                    const reminderElement = createReminderElement(reminder, index);
+                    remindersList.appendChild(reminderElement);
+                    
+                    if (remindersListTab) {
+                        const reminderElementTab = createReminderElement(reminder, index);
+                        remindersListTab.appendChild(reminderElementTab);
+                    }
+                }
+            });
+            
+            if (remindersListTab) {
+                const completedReminders = appState.reminders.filter(r => r.completed);
+                if (completedReminders.length > 0) {
+                    const completedHeader = document.createElement('h3');
+                    completedHeader.textContent = 'LEMBRETES CONCLUÍDOS';
+                    completedHeader.style.marginTop = '30px';
+                    completedHeader.style.color = 'var(--success)';
+                    remindersListTab.appendChild(completedHeader);
+                    
+                    completedReminders.forEach((reminder, index) => {
+                        const originalIndex = appState.reminders.indexOf(reminder);
+                        const reminderElement = createReminderElement(reminder, originalIndex);
+                        reminderElement.style.opacity = '0.7';
+                        remindersListTab.appendChild(reminderElement);
+                    });
+                }
+            }
+        }
+
+        function createReminderElement(reminder, index) {
+            const reminderElement = document.createElement('div');
+            reminderElement.className = 'reminder-item';
+            reminderElement.innerHTML = `
+                <div>
+                    <div class="reminder-text">${reminder.text}</div>
+                    <div class="reminder-time-badge"><i class="fas fa-clock"></i> ${reminder.time}</div>
+                </div>
+                <div class="reminder-actions">
+                    <button class="reminder-btn done" data-reminder-index="${index}" title="Marcar como feito">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <button class="reminder-btn delete" data-reminder-index="${index}" title="Excluir lembrete">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            return reminderElement;
+        }
+
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                    
+                    if (tabId === 'calendario') {
+                        updateCalendar();
+                    }
+                    
+                    if (tabId === 'resumo') {
+                        updateWeeklySummary();
+                    }
+                    
+                    if (tabId === 'lembretes') {
+                        renderReminders();
+                    }
+                    
+                    // Rolagem suave para o topo da aba
+                    document.getElementById(tabId).scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
+                });
+            });
+        }
+
+        function initCalendar() {
+            const daysOfWeek = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SÁB'];
+            const daysContainer = document.getElementById('calendar-days');
+            
+            daysContainer.innerHTML = '';
+            daysOfWeek.forEach(day => {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                daysContainer.appendChild(dayElement);
+            });
+            
+            updateCalendar();
+            
+            document.getElementById('prev-month').addEventListener('click', () => {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                updateCalendar();
+            });
+            
+            document.getElementById('next-month').addEventListener('click', () => {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                updateCalendar();
+            });
+        }
+
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+
+        function updateCalendar() {
+            const monthNames = [
+                'JANEIRO', 'FEVEREIRO', 'MARÇO', 'ABRIL', 'MAIO', 'JUNHO',
+                'JULHO', 'AGOSTO', 'SETEMBRO', 'OUTUBRO', 'NOVEMBRO', 'DEZEMBRO'
+            ];
+            
+            document.getElementById('current-month').textContent = 
+                `${monthNames[currentMonth]} ${currentYear}`;
+            
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            const firstDayOfWeek = firstDay.getDay();
+            
+            const datesContainer = document.getElementById('calendar-dates');
+            datesContainer.innerHTML = '';
+            
+            for (let i = 0; i < firstDayOfWeek; i++) {
+                const emptyElement = document.createElement('div');
+                emptyElement.className = 'calendar-date empty';
+                datesContainer.appendChild(emptyElement);
+            }
+            
+            const today = new Date();
+            const selectedDate = new Date(currentYear, currentMonth, window.selectedDay || today.getDate());
+            
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const dateElement = document.createElement('div');
+                dateElement.className = 'calendar-date';
+                dateElement.textContent = day;
+                
+                if (currentYear === today.getFullYear() && 
+                    currentMonth === today.getMonth() && 
+                    day === today.getDate()) {
+                    dateElement.classList.add('active');
+                }
+                
+                const dateKey = `${currentYear}-${currentMonth+1}-${day}`;
+                if (hasHabitsOnDate(dateKey)) {
+                    dateElement.classList.add('has-habits');
+                }
+                
+                dateElement.addEventListener('click', () => {
+                    document.querySelectorAll('.calendar-date').forEach(el => {
+                        el.classList.remove('active');
+                    });
+                    
+                    dateElement.classList.add('active');
+                    
+                    window.selectedDay = day;
+                    showDayHabits(currentYear, currentMonth, day);
+                });
+                
+                datesContainer.appendChild(dateElement);
+            }
+            
+            if (!window.selectedDay) window.selectedDay = today.getDate();
+            showDayHabits(currentYear, currentMonth, window.selectedDay);
+        }
+
+        function hasHabitsOnDate(dateKey) {
+            for (const habitId in appState.habitsCompleted) {
+                if (appState.habitsCompleted[habitId] && 
+                    appState.habitsCompleted[habitId].startsWith(dateKey)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function showDayHabits(year, month, day) {
+            const dateKey = `${year}-${month+1}-${day}`;
+            const container = document.getElementById('day-habits');
+            container.innerHTML = `<h3 class="color-primary">HÁBITOS PARA ${day}/${month+1}/${year}</h3>`;
+            
+            const dayHabits = [];
+            
+            for (const habitId in appState.habitsCompleted) {
+                if (appState.habitsCompleted[habitId] && 
+                    appState.habitsCompleted[habitId].startsWith(dateKey)) {
+                    const habitNum = parseInt(habitId.replace('habit-', ''));
+                    const habit = habits.find(h => h.id === habitNum);
+                    if (habit) {
+                        dayHabits.push({
+                            ...habit,
+                            note: appState.habitNotes[habitId] || ''
+                        });
+                    }
+                }
+            }
+            
+            if (dayHabits.length === 0) {
+                container.innerHTML += '<p class="text-large">NENHUM HÁBITO REGISTRADO PARA ESTE DIA.</p>';
+                return;
+            }
+            
+            dayHabits.forEach(habit => {
+                const habitElement = document.createElement('div');
+                habitElement.className = 'habit-card';
+                habitElement.innerHTML = `
+                    <div class="habit-number">${habit.id}</div>
+                    <h3>${habit.title}</h3>
+                    <p class="text-large">${habit.description}</p>
+                    <div class="habit-meta">
+                        <i class="fas fa-bullseye"></i> META: ${habit.meta}
+                    </div>
+                    ${habit.note ? `<p class="text-large"><strong>ANOTAÇÃO:</strong> ${habit.note}</p>` : ''}
+                `;
+                container.appendChild(habitElement);
+            });
+        }
+
+        function updateWeeklySummary() {
+            const today = new Date();
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - today.getDay());
+            
+            const endOfWeek = new Date(today);
+            endOfWeek.setDate(today.getDate() + (6 - today.getDay()));
+            
+            const weekRange = `${formatDate(startOfWeek)} a ${formatDate(endOfWeek)}`;
+            
+            let completedCount = 0;
+            let dailyCount = 0;
+            let weeklyCount = 0;
+            const completedHabits = [];
+            const weekNotes = [];
+            
+            for (const habitId in appState.habitsCompleted) {
+                if (appState.habitsCompleted[habitId]) {
+                    const completionDate = new Date(appState.habitsCompleted[habitId]);
+                    
+                    if (completionDate >= startOfWeek && completionDate <= endOfWeek) {
+                        completedCount++;
+                        
+                        const habitNum = parseInt(habitId.replace('habit-', ''));
+                        const habit = habits.find(h => h.id === habitNum);
+                        
+                        if (habit) {
+                            completedHabits.push({
+                                ...habit,
+                                date: appState.habitsCompleted[habitId],
+                                note: appState.habitNotes[habitId] || ''
+                            });
+                            
+                            if (habit.category === 'daily') {
+                                dailyCount++;
+                            } else {
+                                weeklyCount++;
+                            }
+                            
+                            if (appState.habitNotes[habitId]) {
+                                weekNotes.push({
+                                    habit: habit.title,
+                                    note: appState.habitNotes[habitId],
+                                    date: appState.habitsCompleted[habitId]
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            
+            document.getElementById('completed-habits').textContent = completedCount;
+            document.getElementById('completed-daily').textContent = dailyCount;
+            document.getElementById('completed-weekly').textContent = weeklyCount;
+            
+            const totalPossible = 26 * 7 + 5;
+            const completionRate = totalPossible > 0 ? Math.round((completedCount / totalPossible) * 100) : 0;
+            document.getElementById('completion-rate').textContent = `${completionRate}%`;
+            
+            const habitsList = document.getElementById('weekly-summary-list');
+            habitsList.innerHTML = '';
+            
+            if (completedHabits.length === 0) {
+                habitsList.innerHTML = '<p class="text-large">NENHUM HÁBITO REGISTRADO NESTA SEMANA AINDA.</p>';
+            } else {
+                completedHabits.forEach(habit => {
+                    const habitElement = document.createElement('div');
+                    habitElement.className = 'habit-card';
+                    habitElement.style.marginBottom = '20px';
+                    habitElement.innerHTML = `
+                        <div class="habit-number">${habit.id}</div>
+                        <h4>${habit.title}</h4>
+                        <p class="text-large"><strong>DATA:</strong> ${formatDate(new Date(habit.date))}</p>
+                        <p class="text-large">${habit.description}</p>
+                    `;
+                    habitsList.appendChild(habitElement);
+                });
+            }
+            
+            const notesList = document.getElementById('weekly-notes-list');
+            notesList.innerHTML = '';
+            
+            if (weekNotes.length === 0) {
+                notesList.innerHTML = '<p class="text-large">NENHUMA ANOTAÇÃO REGISTRADA NESTA SEMANA.</p>';
+            } else {
+                weekNotes.forEach(item => {
+                    const noteElement = document.createElement('div');
+                    noteElement.className = 'habit-card';
+                    noteElement.style.marginBottom = '20px';
+                    noteElement.innerHTML = `
+                        <h4>${item.habit}</h4>
+                        <p class="text-large"><strong>DATA:</strong> ${formatDate(new Date(item.date))}</p>
+                        <p class="text-large">${item.note}</p>
+                    `;
+                    notesList.appendChild(noteElement);
+                });
+            }
+            
+            document.getElementById('pdf-week-range').textContent = `SEMANA DE ${weekRange}`;
+            
+            const pdfStats = document.getElementById('pdf-stats');
+            pdfStats.innerHTML = `
+                <p><strong>HÁBITOS COMPLETOS:</strong> ${completedCount}</p>
+                <p><strong>HÁBITOS DIÁRIOS:</strong> ${dailyCount}</p>
+                <p><strong>HÁBITOS SEMANAIS:</strong> ${weeklyCount}</p>
+                <p><strong>TAXA DE CONCLUSÃO:</strong> ${completionRate}%</p>
+            `;
+            
+            const pdfHabitsList = document.getElementById('pdf-habits-list');
+            pdfHabitsList.innerHTML = '<h3>HÁBITOS REALIZADOS</h3>';
+            
+            completedHabits.forEach(habit => {
+                pdfHabitsList.innerHTML += `
+                    <p><strong>${habit.title}</strong> (${formatDate(new Date(habit.date))})</p>
+                    <p>${habit.description}</p>
+                `;
+            });
+            
+            const pdfNotesList = document.getElementById('pdf-notes-list');
+            pdfNotesList.innerHTML = '<h3>ANOTAÇÕES DA SEMANA</h3>';
+            
+            weekNotes.forEach(item => {
+                pdfNotesList.innerHTML += `
+                    <p><strong>${item.habit}</strong> (${formatDate(new Date(item.date))})</p>
+                    <p>${item.note}</p>
+                `;
+            });
+        }
+
+        function setupEventListeners() {
+            document.getElementById('save-all').addEventListener('click', saveToLocalStorage);
+            document.getElementById('save-all-bottom').addEventListener('click', saveToLocalStorage);
+            
+            document.getElementById('load-data').addEventListener('click', () => {
+                loadFromLocalStorage();
+                renderHabits();
+                updateCalendar();
+                updateWeeklySummary();
+                updateMetrics();
+                renderReminders();
+                showNotification('DADOS CARREGADOS COM SUCESSO!', 'success');
+            });
+            
+            document.getElementById('export-pdf').addEventListener('click', exportToPDF);
+            
+            document.getElementById('reset-week').addEventListener('click', resetWeek);
+            
+            document.getElementById('add-reminder').addEventListener('click', addReminder);
+            document.getElementById('add-reminder-tab').addEventListener('click', addReminder);
+            
+            document.getElementById('reminder-text').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addReminder();
+                }
+            });
+            
+            document.getElementById('reminder-text-tab').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addReminder();
+                }
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.check-btn')) {
+                    const button = e.target.closest('.check-btn');
+                    const habitId = button.getAttribute('data-habit-id');
+                    toggleHabitCompletion(habitId, button);
+                }
+                
+                if (e.target.closest('.reminder-btn.done')) {
+                    const button = e.target.closest('.reminder-btn.done');
+                    const index = parseInt(button.getAttribute('data-reminder-index'));
+                    toggleReminderCompletion(index);
+                }
+                
+                if (e.target.closest('.reminder-btn.delete')) {
+                    const button = e.target.closest('.reminder-btn.delete');
+                    const index = parseInt(button.getAttribute('data-reminder-index'));
+                    deleteReminder(index);
+                }
+                
+                if (e.target.classList.contains('notes-area')) {
+                    const textarea = e.target;
+                    const habitId = textarea.getAttribute('data-habit-id');
+                    
+                    textarea.addEventListener('blur', function() {
+                        saveHabitNote(habitId, textarea.value);
+                    });
+                }
+            });
+        }
+
+        function addReminder() {
+            const textInput = document.getElementById('reminder-text');
+            const timeInput = document.getElementById('reminder-time');
+            const textInputTab = document.getElementById('reminder-text-tab');
+            const timeInputTab = document.getElementById('reminder-time-tab');
+            
+            let text = '';
+            let time = '09:00';
+            
+            if (textInput && textInput.value.trim()) {
+                text = textInput.value.trim();
+                time = timeInput.value;
+            } else if (textInputTab && textInputTab.value.trim()) {
+                text = textInputTab.value.trim();
+                time = timeInputTab.value;
+            } else {
+                showNotification('DIGITE UM LEMBRETE ANTES DE ADICIONAR!', 'warning');
+                return;
+            }
+            
+            const reminder = {
+                id: Date.now(),
+                text: text,
+                time: time,
+                completed: false,
+                createdAt: new Date().toISOString()
+            };
+            
+            appState.reminders.push(reminder);
+            
+            if (textInput) textInput.value = '';
+            if (textInputTab) textInputTab.value = '';
+            
+            renderReminders();
+            saveToLocalStorage();
+            
+            showNotification('LEMBRETE ADICIONADO COM SUCESSO!', 'success');
+        }
+
+        function toggleReminderCompletion(index) {
+            if (appState.reminders[index]) {
+                appState.reminders[index].completed = !appState.reminders[index].completed;
+                renderReminders();
+                saveToLocalStorage();
+                
+                const action = appState.reminders[index].completed ? 'CONCLUÍDO' : 'REATIVADO';
+                showNotification(`LEMBRETE ${action}!`, 'success');
+            }
+        }
+
+        function deleteReminder(index) {
+            if (appState.reminders[index]) {
+                appState.reminders.splice(index, 1);
+                renderReminders();
+                saveToLocalStorage();
+                showNotification('LEMBRETE EXCLUÍDO!', 'success');
+            }
+        }
+
+        function toggleHabitCompletion(habitId, button) {
+            const todayKey = getTodayKey();
+            const isCompleted = appState.habitsCompleted[habitId];
+            const completedToday = isCompleted && isCompleted.startsWith(todayKey);
+            
+            if (completedToday) {
+                delete appState.habitsCompleted[habitId];
+                button.classList.remove('checked');
+                button.innerHTML = '<i class="fas fa-check"></i> MARCAR COMO REALIZADO';
+                
+                button.parentElement.querySelector('.text-large').textContent = '';
+            } else {
+                const now = new Date().toISOString();
+                appState.habitsCompleted[habitId] = now;
+                button.classList.add('checked');
+                button.innerHTML = '<i class="fas fa-check-circle"></i> REALIZADO HOJE';
+                
+                button.parentElement.querySelector('.text-large').textContent = formatDate(new Date(now));
+            }
+            
+            updateCalendar();
+            updateWeeklySummary();
+            updateMetrics();
+            saveToLocalStorage();
+        }
+
+        function saveHabitNote(habitId, note) {
+            if (note.trim()) {
+                appState.habitNotes[habitId] = note.trim();
+            } else {
+                delete appState.habitNotes[habitId];
+            }
+            
+            saveToLocalStorage();
+        }
+
+        function toggleAccessibility() {
+            const body = document.body;
+            const root = document.documentElement;
+            
+            if (appState.highContrast) {
+                body.classList.remove('high-contrast');
+                root.style.setProperty('--primary', '#FF9A76');
+                root.style.setProperty('--secondary', '#6A8CAF');
+                root.style.setProperty('--accent', '#4ECDC4');
+                root.style.setProperty('--dark', '#2C3E50');
+                appState.highContrast = false;
+            } else {
+                body.classList.add('high-contrast');
+                root.style.setProperty('--primary', '#FF6B35');
+                root.style.setProperty('--secondary', '#00B4D8');
+                root.style.setProperty('--accent', '#FFD60A');
+                root.style.setProperty('--dark', '#1A1A2E');
+                appState.highContrast = true;
+            }
+            
+            if (appState.fontSize === "large") {
+                root.style.setProperty('--text-large', '1.4rem');
+                root.style.setProperty('--text-xlarge', '1.6rem');
+                root.style.setProperty('--text-xxlarge', '2rem');
+                root.style.setProperty('--text-title', '3.2rem');
+                appState.fontSize = "xlarge";
+                showNotification('TEXTO AUMENTADO E ALTO CONTRASTE ATIVADO!', 'success');
+            } else {
+                root.style.setProperty('--text-large', '1.2rem');
+                root.style.setProperty('--text-xlarge', '1.4rem');
+                root.style.setProperty('--text-xxlarge', '1.8rem');
+                root.style.setProperty('--text-title', '3rem');
+                appState.fontSize = "large";
+                showNotification('TEXTO REDUZIDO E ALTO CONTRASTE DESATIVADO!', 'success');
+            }
+            
+            saveToLocalStorage();
+        }
+
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFontSize(24);
+            doc.setTextColor(255, 107, 53);
+            doc.text('RESUMO SEMANAL - MUNDO LONGEVO', 20, 25);
+            
+            doc.setFontSize(18);
+            doc.setTextColor(0, 180, 216);
+            const weekRange = document.getElementById('pdf-week-range').textContent;
+            doc.text(weekRange, 20, 45);
+            
+            doc.setFontSize(16);
+            doc.setTextColor(26, 26, 46);
+            let yPos = 65;
+            
+            const stats = [
+                `HÁBITOS COMPLETOS: ${document.getElementById('completed-habits').textContent}`,
+                `HÁBITOS DIÁRIOS: ${document.getElementById('completed-daily').textContent}`,
+                `HÁBITOS SEMANAIS: ${document.getElementById('completed-weekly').textContent}`,
+                `TAXA DE CONCLUSÃO: ${document.getElementById('completion-rate').textContent}`
+            ];
+            
+            stats.forEach(stat => {
+                doc.text(stat, 20, yPos);
+                yPos += 12;
+            });
+            
+            yPos += 15;
+            
+            doc.setFontSize(18);
+            doc.setTextColor(255, 107, 53);
+            doc.text('HÁBITOS REALIZADOS:', 20, yPos);
+            yPos += 20;
+            
+            doc.setFontSize(14);
+            doc.setTextColor(26, 26, 46);
+            
+            const habitsText = document.getElementById('pdf-habits-list').innerText;
+            const habitsLines = doc.splitTextToSize(habitsText, 170);
+            
+            habitsLines.forEach(line => {
+                if (yPos > 270) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+                doc.text(line, 20, yPos);
+                yPos += 8;
+            });
+            
+            yPos += 15;
+            
+            doc.setFontSize(18);
+            doc.setTextColor(255, 214, 10);
+            doc.text('ANOTAÇÕES DA SEMANA:', 20, yPos);
+            yPos += 20;
+            
+            doc.setFontSize(14);
+            doc.setTextColor(26, 26, 46);
+            
+            const notesText = document.getElementById('pdf-notes-list').innerText;
+            const notesLines = doc.splitTextToSize(notesText, 170);
+            
+            notesLines.forEach(line => {
+                if (yPos > 270) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+                doc.text(line, 20, yPos);
+                yPos += 8;
+            });
+            
+            yPos += 20;
+            
+            doc.setFontSize(13);
+            doc.setFont(undefined, 'italic');
+            doc.setTextColor(255, 107, 53);
+            doc.text('"LONGELESCER É RECONHECER ISSO COM TERNURA. É ATUALIZAR-SE POR DENTRO."', 20, yPos);
+            doc.text('- RICARDO DE FARIA BARROS, PSICÓLOGO', 20, yPos + 8);
+            
+            doc.save(`RESUMO-MUNDO-LONGEVO-${new Date().toISOString().split('T')[0]}.pdf`);
+            
+            showNotification('PDF GERADO COM SUCESSO!', 'success');
+        }
+
+        function resetWeek() {
+            if (confirm('TEM CERTEZA QUE DESEJA REINICIAR OS DADOS DESTA SEMANA? ISSO REMOVERÁ TODOS OS HÁBITOS REGISTRADOS NOS ÚLTIMOS 7 DIAS.')) {
+                const today = new Date();
+                const startOfWeek = new Date(today);
+                startOfWeek.setDate(today.getDate() - today.getDay());
+                
+                const endOfWeek = new Date(today);
+                endOfWeek.setDate(today.getDate() + (6 - today.getDay()));
+                
+                for (const habitId in appState.habitsCompleted) {
+                    if (appState.habitsCompleted[habitId]) {
+                        const completionDate = new Date(appState.habitsCompleted[habitId]);
+                        
+                        if (completionDate >= startOfWeek && completionDate <= endOfWeek) {
+                            delete appState.habitsCompleted[habitId];
+                            delete appState.habitNotes[habitId];
+                        }
+                    }
+                }
+                
+                renderHabits();
+                updateCalendar();
+                updateWeeklySummary();
+                updateMetrics();
+                saveToLocalStorage();
+                
+                showNotification('SEMANA REINICIADA COM SUCESSO!', 'success');
+            }
+        }
+
+        function showRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            const quoteElement = document.querySelector('.quote-container p');
+            quoteElement.textContent = quotes[randomIndex];
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? 'var(--success)' : type === 'warning' ? 'var(--warning)' : 'var(--accent)';
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 30px;
+                right: 30px;
+                background: linear-gradient(135deg, ${bgColor} 0%, ${type === 'success' ? '#2D9C00' : type === 'warning' ? '#FF9E00' : '#FFC300'} 100%);
+                color: var(--dark);
+                padding: 20px 30px;
+                border-radius: 10px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+                z-index: 1000;
+                font-weight: 800;
+                font-size: 1.2rem;
+                animation: slideIn 0.4s ease;
+                border: 4px solid white;
+                max-width: 400px;
+                text-align: center;
+                letter-spacing: 0.5px;
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.4s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 400);
+            }, 4000);
+        }
+
+        function formatDate(date) {
+            if (!date) return '';
+            
+            const d = new Date(date);
+            return `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}`;
+        }
+    </script>
+</body>
+</html>
